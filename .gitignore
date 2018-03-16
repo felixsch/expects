@@ -2,9 +2,9 @@
 *.pyc
 .tox
 **/__pycache__
-*.egginfo
+*.egg-info
 build
 dist
-.ropecache
+.ropeproject
 .coverage
 
