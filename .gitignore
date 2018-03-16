@@ -1,0 +1,10 @@
+*.venv
+*.pyc
+.tox
+**/__pycache__
+*.egginfo
+build
+dist
+.ropecache
+.coverage
+
