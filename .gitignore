@@ -7,4 +7,6 @@ build
 dist
 .ropeproject
 .coverage
+.pytest_cache/
+tags
 
