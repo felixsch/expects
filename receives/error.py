@@ -1,7 +1,7 @@
 class colors():
-    RED = "\e[31m"
-    GREEN = "\e[32m"
-    CLEAR = "\e[0m"
+    RED = "\033[0;31m"
+    GREEN = "\033[0;32m"
+    CLEAR = "\033[0m"
 
 
 def assert_failed(context, message, expected, got):
@@ -12,6 +12,6 @@ def assert_failed(context, message, expected, got):
     got_str = colors.RED + str(got) + colors.CLEAR
     expected_str = colors.GREEN + str(expected) + colors.CLEAR
 
-    return "{}\nexpected:\n{}\ngot instead:\n{}".format(text,
+    return "{}\nexpected:\n  {}\ngot instead:\n  {}".format(text,
                                                         expected_str,
                                                         got_str)

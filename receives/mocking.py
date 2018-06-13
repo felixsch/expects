@@ -1,10 +1,6 @@
 MOCK_TABLE = "__mock_table__"
 
 
-def has_mock_table(context):
-    return hasattr(context.object(), MOCK_TABLE)
-
-
 def has_method_mock(context):
     if not has_mock_table(context):
         return False

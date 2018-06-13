@@ -9,10 +9,11 @@ python:
 install:
   pip install -r dev-requirements.txt
   pip install tox-travis
+  pip install coveralls
 
 script:
   - tox
-  - coverage run --source receive -m py.test
+  - coverage run --source receives -m py.test
   - coverage report -m
 
 after_success:

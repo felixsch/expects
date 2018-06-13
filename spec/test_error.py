@@ -18,9 +18,9 @@ def context():
 
 
 def test_colors():
-    expect(colors.RED).to(equal("\e[31m"))
-    expect(colors.GREEN).to(equal("\e[32m"))
-    expect(colors.CLEAR).to(equal("\e[0m"))
+    expect(colors.RED).to(equal("\033[0;31m"))
+    expect(colors.GREEN).to(equal("\033[0;32m"))
+    expect(colors.CLEAR).to(equal("\033[0m"))
 
 
 def test_assert_failed():

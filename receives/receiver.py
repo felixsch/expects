@@ -6,16 +6,15 @@ from receives.expectation import empty_expectation
 
 
 def receive(module_or_class, method_name):
-    # get tests function name to later trace the the call stack
-    caller = sys._getframe(1).f_code.co_name
-    context = Context(caller, module_or_class, method_name)
+    caller_frame = sys._getframe(1)
+    context = Context(caller_frame, module_or_class, method_name)
 
     return Receiver(context)
 
 
 def allow(module_or_class, method_name):
-    caller = sys._getframe(1).f_code.co_name
-    context = Context(caller, module_or_class, method_name)
+    caller_frame = sys._getframe(1)
+    context = Context(caller_frame, module_or_class, method_name)
 
     return Receiver(context, persistant=True)
 
@@ -28,15 +27,19 @@ class Receiver(object):
 
         self._prepare_object()
         self._prepare_expectation(persistant)
+        print("__init__: {}".format(self))
 
     def __enter__(self):
+        print("__enter__: {}".format(self))
         pass
 
     def __exit__(self, exc_type, exc_val, exc_tb):
+        print("__exit__: {}".format(self))
         if mocking.has_method_mock(self._context):
             mocking.remove_method_mock(self._context, self._orginal_call)
 
     def __del__(self):
+        print("__del__: {}".format(self))
         if mocking.has_method_mock(self._context):
             mocking.remove_method_mock(self._context, self._orginal_call)
 

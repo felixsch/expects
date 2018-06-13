@@ -13,9 +13,9 @@ setup(
     url='https://github.com/felixsch/receive',
     author='Felix Schnizlein',
     author_email='felix@schnizle.in',
-    licence='MIT',
+    license='MIT',
     packages=find_packages(exclude=['spec']),
-    test_requires=test_requirements,
+    tests_require=test_requirements,
     classifiers=[
         'Development Status :: 3 - Alpha',
         'Licence :: OSI Approved MIT Licence',

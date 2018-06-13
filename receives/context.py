@@ -1,4 +1,7 @@
 import inspect
+import sys
+
+from receives import util
 
 
 class Context(object):
@@ -16,7 +19,9 @@ class Context(object):
             return self._object.__name__
         if inspect.isclass(self._object):
             return self._object.__name__
-        return self._instance_name()
+
+        frame = util.find_frame(self._caller_name)
+        return self._extract_instance_name(frame)
 
     def method_name(self):
         return self._method_name
@@ -31,13 +36,6 @@ class Context(object):
         return self._method
 
     # private
-
-    def _instance_name(self):
-        frameinfos = inspect.getouterframes(inspect.currentframe())
-        for frameinfo in frameinfos:
-            if frameinfo.function == self._caller_name:
-                return self._extract_instance_name(frameinfo.frame)
-        return None
 
     def _extract_instance_name(self, frame):
         for name, obj in frame.f_locals.items():
