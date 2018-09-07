@@ -1,111 +1,32 @@
-import sys
-
-from receives import mocking
-from receives.context import Context
-from receives.expectation import empty_expectation
+from receives.mapping import Mapping
 
 
-def receive(module_or_class, method_name):
-    caller_frame = sys._getframe(1)
-    context = Context(caller_frame, module_or_class, method_name)
+class Receiver():
+    def __init__(self):
+        self._mapping = Mapping()
 
-    return Receiver(context)
+    def __call__(self, obj, attribute):
+        patch = self._mapping.find_by(obj, attribute)
 
+        if patch is not None:
+            return patch.new_expectation()
 
-def allow(module_or_class, method_name):
-    caller_frame = sys._getframe(1)
-    context = Context(caller_frame, module_or_class, method_name)
+        caller_frame = sys._getframe(1)
 
-    return Receiver(context, persistant=True)
+        context = Context(obj, attribute, caller_frame)
+        patch = self._mapping.create_patch(context)
+        patch.patch()
 
+        return patch.new_expectation()
 
-class Receiver(object):
-    def __init__(self, context, persistant=False):
-        self._context = context
-        self._expectations = []
-        self._orginal_call = None
+    def finalize(self):
+        self._mapping.finalize()
 
-        self._prepare_object()
-        self._prepare_expectation(persistant)
-        print("__init__: {}".format(self))
-
-    def __enter__(self):
-        print("__enter__: {}".format(self))
-        pass
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        print("__exit__: {}".format(self))
-        if mocking.has_method_mock(self._context):
-            mocking.remove_method_mock(self._context, self._orginal_call)
-
-    def __del__(self):
-        print("__del__: {}".format(self))
-        if mocking.has_method_mock(self._context):
-            mocking.remove_method_mock(self._context, self._orginal_call)
-
-    def with_args(self, *kargs, **kwargs):
-        expectation = self._last_expectation()
-        expectation.set_args(kargs, kwargs)
-
-        self._add_expecation(expectation)
-        return self
-
-    def and_return(self, value):
-        expectation = self._last_expectation()
-        expectation.set_return_value(value)
-
-        self._add_expecation(expectation)
-        return self
-
-    def is_called(self, times):
-        expectation = self._last_expectation()
-        for _ in range(times):
-            self._add_expecation(expectation)
-
-    # private
-
-    def _prepare_object(self):
-        if not mocking.has_method_mock(self._context):
-            call = mocking.add_method_mock(self._context,
-                                           self,
-                                           self._mocked_call)
-            self._orginal_call = call
-
-    def _prepare_expectation(self, persistant):
-        receiver = mocking.get_receiver_for(self._context)
-        expectation = empty_expectation(self._context, persistant)
-
-        receiver._add_expecation(expectation)
-
-    def _mocked_call(self, *kargs, **kwargs):
-        receiver = mocking.get_receiver_for(self._context)
-
-        expectation = receiver._next_expectation()
-        expectation.evaluate(kargs, kwargs)
-
-        return expectation.return_value()
-
-    def _add_expecation(self, expectation):
-        receiver = mocking.get_receiver_for(self._context)
-        receiver._expectations.append(expectation)
-
-    def _last_expectation(self):
-        receiver = mocking.get_receiver_for(self._context)
-        return receiver._expectations.pop()
-
-    def _next_expectation(self):
-        # the the first expectation in the list
-        expectation = self._expectations.pop(0)
-        if expectation.is_persistant():
-            # append the expecatation again to the list
-            self._expectations.append(expectation)
-            # when there are more than the persistant expectation than add the
-            # persistant expectation to the end of the list to make overwrites
-            # work
-            if len(self._expectations) > 1:
-                return self._expectations.pop(0)
-        # no more expectations in the list mark this method as invalid and
-        # raise an error if called
-        if not len(self._expectations):
-            mocking.remove_method_mock(self._context, self._orginal_call)
-        return expectation
+def receives(func):
+    def call_receiver(*kargs, **kwargs):
+        receiver = Receiver()
+        kwargs['receive'] = receiver
+        result = func(*kargs, **kwargs)
+        receiver.finalize()
+        return result
+    return call_receiver
