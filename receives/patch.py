@@ -4,6 +4,8 @@ from receives.error import Bug
 from receives.expectation import Expectation
 from receives.context import AttributeType, ObjectType
 
+import sys
+
 
 class Patch():
     def __init__(self, mapping, context):
