@@ -152,6 +152,16 @@ def patch_handle_default(patch, *kargs, **kwargs):
     return patch_evaluate(patch, kargs, kwargs)
 
 
+def patch_fake_property(patch):
+    prop = getattr(patch.ctx.object, patch.ctx.attribute_name)
+    fake_get = partial(patch_handle_property_get, patch)
+    fake_set = partial(patch_handle_property_set, patch)
+
+    if prop.fset:
+        return property(fake_get, fake_set)
+    return property(fake_get)
+
+
 def patch_handle_property_get(patch, *kargs, **kwargs):
     def eval(kargs, kwargs):
         return patch.original_call.__get__(*kargs, **kwargs)
@@ -162,13 +172,3 @@ def patch_handle_property_set(patch, *kargs_, **kwargs_):
     def eval(kargs, kwargs):
         return patch.original_call.__set__(*kargs_, **kwargs_)
     return patch_evaluate(patch, kargs_[1:], kwargs_, eval_original_call=eval)
-
-
-def patch_fake_property(patch):
-    prop = getattr(patch.ctx.object, patch.ctx.attribute_name)
-    fake_get = partial(patch_handle_property_get, patch)
-    fake_set = partial(patch_handle_property_set, patch)
-
-    if prop.fset:
-        return property(fake_get, fake_set)
-    return property(fake_get)
