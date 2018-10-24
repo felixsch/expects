@@ -1,3 +1,7 @@
+from functools import partial
+
+from receives.error import assert_failed
+
 class Expectation():
     def __init__(self, context):
         self._context = context

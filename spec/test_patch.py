@@ -172,6 +172,36 @@ with description(patch.patch_evaluate):
         self.subject = patch.Patch(self.mapping, self.context)
 
     with describe('runs the generic evaluation'):
-        with it(''):
-            print('foo')
+        with context('valid input'):
+            with it('runs and validates against the input'):
+                self.subject.was_called = MagicMock()
+                ex = self.subject.new_expectation()
+                ex.with_args('foo').and_return('returnvalue')
+
+                value = patch.patch_evaluate(self.subject, ('foo',), {})
+                expect(value).to(equal('returnvalue'))
+                expect(self.subject.was_called.called).to(be_true)
+
+            with it('returns None if there is no expectation'):
+                self.subject.was_called = MagicMock()
+
+                expect(patch.patch_evaluate(self.subject, (), {})).to(be_none)
+                expect(self.subject.was_called.called).to(be_true)
+
+            with it('calles the original call'):
+                self.subject.patch()
+                self.subject.was_called = MagicMock()
+                ex = self.subject.new_expectation()
+                ex.with_args('moep').and_call_original()
+
+                value = patch.patch_evaluate(self.subject, ('moep',), {})
+
+                expect(self.subject.was_called.called).to(be_true)
+                expect(value).to(equal('moep'))
+
+
+
+
+
+
 
