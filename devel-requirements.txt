@@ -5,3 +5,4 @@ pytest
 pytest-watch
 expects
 mamba
+sphinx

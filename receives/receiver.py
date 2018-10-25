@@ -28,6 +28,8 @@ class Receiver():
 
 
 def receives(func):
+    """ Decorate a method to enable method mocking
+    """
     def call_receiver(*kargs, **kwargs):
         receiver = Receiver()
         kwargs['receive'] = receiver

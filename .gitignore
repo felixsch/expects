@@ -5,6 +5,7 @@
 *.egg-info
 build
 dist
+docs/_build/
 .ropeproject
 .coverage
 .pytest_cache/
