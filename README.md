@@ -1,5 +1,5 @@
 # receives
-[![Build Status](https://travis-ci.org/felixsch/receives.svg?branch=master)](https://travis-ci.org/felixsch/receives) [![Coverage Status](https://coveralls.io/repos/github/felixsch/receives/badge.svg?branch=master)](https://coveralls.io/github/felixsch/receives?branch=master) [![GitHub license](https://img.shields.io/github/license/felixsch/receives.svg)](https://github.com/felixsch/receives) [![Read the docs](https://readthedocs.org/projects/receives/badge/?version=latest)]
+[![Build Status](https://travis-ci.org/felixsch/receives.svg?branch=master)](https://travis-ci.org/felixsch/receives) [![Coverage Status](https://coveralls.io/repos/github/felixsch/receives/badge.svg?branch=master)](https://coveralls.io/github/felixsch/receives?branch=master) [![GitHub license](https://img.shields.io/github/license/felixsch/receives.svg)](https://github.com/felixsch/receives) [![Read the docs](https://readthedocs.org/projects/receives/badge/?version=latest)](https://receives.readthedocs.io/en/latest/)
 
 **receives** is a easy to use mocking library for python 3 and python 2.7 to 
 make testing more easy.
@@ -37,13 +37,21 @@ Documentation can be found at [Read the docs](https://receives.readthedocs.io/en
 
 via pip:
 
+```bash
+
   $ pip install receives
+  
+```
 
 or via git:
+
+```bash
 
   $ git clone https://github.com/felixsch/receives.git
   $ cd receives
   $ python setup.py install
+  
+```
 
 ## Issues & Features
 
@@ -54,15 +62,23 @@ Open a new GitHub issue!
 
 To install **receives** in development mode:
 
+```bash
+
   $ git clone https://github.com/felixsch/receives.git
   $ cd receives
   $ pip install -r devel-requirements.txt
   $ python setup.py develop
+  
+```
 
 To run tests:
 
+```bash
+
   $ cd receives
   $ tox
+  
+```
 
 
 ## Contribute
