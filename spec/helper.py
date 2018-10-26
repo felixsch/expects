@@ -3,9 +3,13 @@ import sys
 from contextlib import contextmanager
 from pytest import raises
 from mamba import description, describe, before, it, context
-from unittest.mock import MagicMock
 
 from receives.context import Context
+
+if sys.version_info >= (3, 3):
+    from unittest.mock import MagicMock
+else:
+    from mock import MagicMock
 
 
 __all__ = ['raises', 'not_raises',

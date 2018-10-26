@@ -1,11 +1,12 @@
 from enum import Enum
 import inspect
 
+
 class ObjectType(Enum):
     Variable = "variable"
     Module = "module"
     Method = "method"
-    Class  = "class"
+    Class = "class"
     Instance = "instance"
 
 
@@ -14,12 +15,18 @@ class AttributeType(Enum):
     Property = "property"
     ClassMethod = "classmethod"
 
+
+def to_hash(obj, attribute):
+    return hash((obj, attribute))
+
+
 def determine_attribute_type(obj, attribute):
     if isinstance(attribute, property):
         return AttributeType.Property
     if inspect.isclass(obj) and inspect.ismethod(attribute) and attribute.__self__ is obj:
         return AttributeType.ClassMethod
     return AttributeType.Method
+
 
 def determine_object_type(obj):
     if not hasattr(obj, '__dict__'):
@@ -33,8 +40,6 @@ def determine_object_type(obj):
     else:
         return ObjectType.Instance
 
-def to_hash(obj, attribute):
-    return hash((obj, attribute))
 
 class Context():
     def __init__(self, obj, attribute_name, caller_frame):
@@ -75,7 +80,6 @@ class Context():
         if not hasattr(self.object, "__class__"):
             return None
         return self.object.__class__
-
 
     @property
     def attribute_name(self):

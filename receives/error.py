@@ -1,6 +1,7 @@
 class Bug(AssertionError):
     pass
 
+
 class colors():
     RED = "\033[0;31m"
     GREEN = "\033[0;32m"
@@ -16,5 +17,5 @@ def assert_failed(context, message, expected, got):
     expected_str = colors.GREEN + str(expected) + colors.CLEAR
 
     return "{}\nexpected:\n  {}\ngot instead:\n  {}".format(text,
-                                                        expected_str,
-                                                        got_str)
+                                                            expected_str,
+                                                            got_str)

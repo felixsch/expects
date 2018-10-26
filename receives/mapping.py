@@ -2,6 +2,7 @@ from receives.context import to_hash, ObjectType
 from receives.patch import Patch
 from receives.error import Bug
 
+
 class Mapping():
     def __init__(self):
         self._patches = []
@@ -14,7 +15,6 @@ class Mapping():
                 return patch
         return None
 
-
     def is_already_patched(self, context):
         return self.find_by(context.object, context.attribute_name) is not None
 
@@ -24,12 +24,12 @@ class Mapping():
         return self.find_by(context.base_class, context.attribute_name)
 
     def find_instance_patch(self, context):
-        if context.object_type != ObjectType.Class: return None
+        if context.object_type != ObjectType.Class:
+            return None
         for patch in self._patches:
             if patch.ctx.base_class == context.object and patch.ctx.attribute_name == context.attribute_name:
                 return patch
         return None
-
 
     def create_patch(self, context):
         if self.is_already_patched(context):
