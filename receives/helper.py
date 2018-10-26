@@ -1,6 +1,4 @@
-import sys
 import inspect
-from types import CodeType
 
 
 def current_module():

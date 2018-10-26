@@ -8,6 +8,7 @@ dist
 docs/_build/
 .ropeproject
 .coverage
+htmlcov/
 .pytest_cache/
 tags
 

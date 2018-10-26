@@ -21,6 +21,8 @@ def test_function(string):
 
 # A simple test class to test the implementation
 class TestClass():
+    prop2_value = 42
+
     def valid(self, string):
         return string
 
@@ -30,6 +32,14 @@ class TestClass():
     @property
     def prop(self):
         return 42
+
+    @property
+    def prop2(self):
+        return self.prop2_value
+
+    @prop2.setter
+    def prop2(self, value):
+        self.prop2_value = value
 
 
 # Generate a context on the fly

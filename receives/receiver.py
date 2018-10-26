@@ -1,5 +1,4 @@
 import sys
-import inspect
 
 from receives.mapping import Mapping
 from receives.context import Context
