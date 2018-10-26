@@ -4,3 +4,6 @@ flake8
 pytest
 pytest-watch
 expects
+mamba
+sphinx
+mock

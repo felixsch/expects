@@ -1,44 +1,100 @@
+from enum import Enum
 import inspect
-import sys
-
-from receives import util
 
 
-class Context(object):
-    def __init__(self, caller_name, base_object, method_to_mock):
-        self._caller_name = caller_name
-        self._object = base_object
-        self._method_name = method_to_mock
-        self._method = None
+class ObjectType(Enum):
+    Variable = "variable"
+    Module = "module"
+    Method = "method"
+    Class = "class"
+    Instance = "instance"
 
-    def caller_name(self):
-        return self._caller_name
 
-    def object_name(self):
-        if inspect.ismodule(self._object):
-            return self._object.__name__
-        if inspect.isclass(self._object):
-            return self._object.__name__
+class AttributeType(Enum):
+    Method = "method"
+    Property = "property"
+    ClassMethod = "classmethod"
 
-        frame = util.find_frame(self._caller_name)
-        return self._extract_instance_name(frame)
 
-    def method_name(self):
-        return self._method_name
+def to_hash(obj, attribute):
+    return hash((obj, attribute))
 
+
+def determine_attribute_type(obj, attribute):
+    if isinstance(attribute, property):
+        return AttributeType.Property
+    if inspect.isclass(obj) and inspect.ismethod(attribute) and attribute.__self__ is obj:
+        return AttributeType.ClassMethod
+    return AttributeType.Method
+
+
+def determine_object_type(obj):
+    if not hasattr(obj, '__dict__'):
+        return ObjectType.Variable
+    if inspect.ismodule(obj):
+        return ObjectType.Module
+    if inspect.isroutine(obj):
+        return ObjectType.Method
+    if inspect.isclass(obj):
+        return ObjectType.Class
+    else:
+        return ObjectType.Instance
+
+
+class Context():
+    def __init__(self, obj, attribute_name, caller_frame):
+        self._object = obj
+        self._attribute_name = attribute_name
+        self._caller_frame = caller_frame
+
+        self._object_type = determine_object_type(self.object)
+
+        attribute = getattr(self.object, self.attribute_name)
+        self._attribute_type = determine_attribute_type(self.object, attribute)
+
+    @property
     def object(self):
         return self._object
 
-    def set_method(self, method):
-        self._method = method
+    @property
+    def object_type(self):
+        return self._object_type
 
-    def method(self):
-        return self._method
+    @property
+    def object_name(self):
+        if self.object_type == ObjectType.Module:
+            return self.object.__name__
+        if self.object_type == ObjectType.Class:
+            return self.object.__name__
 
-    # private
+        return self._extract_instance_name(self._caller_frame)
 
     def _extract_instance_name(self, frame):
         for name, obj in frame.f_locals.items():
             if obj == self._object:
                 return name
         return self._object.__class__.__name__
+
+    @property
+    def base_class(self):
+        if not hasattr(self.object, "__class__"):
+            return None
+        return self.object.__class__
+
+    @property
+    def attribute_name(self):
+        return self._attribute_name
+
+    @property
+    def attribute_type(self):
+        return self._attribute_type
+
+    def __hash__(self):
+        return to_hash(self.object, self.attribute_name)
+
+    def __repr__(self):
+        return ("<Context object={} object_type={} attribute_name={} attribute_type={}>"
+                .format(self.object,
+                        self.object_type,
+                        self.attribute_name,
+                        self.attribute_type))

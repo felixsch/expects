@@ -1,10 +1,23 @@
 import pytest
+import sys
 from contextlib import contextmanager
 
+from receives.context import Context
 
-class Double():
-    def double_method():
-        return 42
+
+# A simple test class to test the implementation
+class TestClass():
+    def valid():
+        pass
+
+    def invalid():
+        pass
+
+
+# Generate a context on the fly
+def make_context(self, instance, attribute):
+    frame = sys._getframe(1)
+    return Context(instance, attribute, frame)
 
 
 @contextmanager
