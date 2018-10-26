@@ -30,7 +30,6 @@ Documentation can be found at [Read the docs](https://receives.readthedocs.io/en
     assert(stack.pop() == "World")
 
     # E AssertionError: Expected stack.pop to run 2 times but run 3 times.
-
 ```
 
 ## Installation
@@ -38,19 +37,15 @@ Documentation can be found at [Read the docs](https://receives.readthedocs.io/en
 via pip:
 
 ```bash
-
   $ pip install receives
-  
 ```
 
 or via git:
 
 ```bash
-
   $ git clone https://github.com/felixsch/receives.git
   $ cd receives
   $ python setup.py install
-  
 ```
 
 ## Issues & Features
@@ -63,21 +58,17 @@ Open a new GitHub issue!
 To install **receives** in development mode:
 
 ```bash
-
   $ git clone https://github.com/felixsch/receives.git
   $ cd receives
   $ pip install -r devel-requirements.txt
   $ python setup.py develop
-  
 ```
 
 To run tests:
 
 ```bash
-
   $ cd receives
   $ tox
-  
 ```
 
 
