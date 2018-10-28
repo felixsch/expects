@@ -91,10 +91,3 @@ class Context():
 
     def __hash__(self):
         return to_hash(self.object, self.attribute_name)
-
-    def __repr__(self):
-        return ("<Context object={} object_type={} attribute_name={} attribute_type={}>"
-                .format(self.object,
-                        self.object_type,
-                        self.attribute_name,
-                        self.attribute_type))

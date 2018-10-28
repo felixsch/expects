@@ -27,6 +27,10 @@ def test_function(string):
 class TestClass():
     prop2_value = 42
 
+    @classmethod
+    def classmethod(cls):
+        return cls
+
     def valid(self, string):
         return string
 
