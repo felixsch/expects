@@ -10,5 +10,6 @@ docs/_build/
 .coverage
 htmlcov/
 .pytest_cache/
+.hypothesis
 tags
 
