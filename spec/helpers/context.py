@@ -40,6 +40,23 @@ possible_contexts = nested_namedtuple('possible_contexts', {
     'class': {
         'object': testers.ATestClass,
         'object_name': 'ATestClass',
+        'attribute': 'method',
+        'valid': {
+            'kargs': ('test'),
+            'kwargs': {}
+        },
+        'invalid': {
+            'kargs': (),
+            'kwargs': {'invalid': True}
+        },
+        'types': {
+            'attribute': AttributeType.Method,
+            'object': ObjectType.Class
+        }
+    },
+    'class_method': {
+        'object': testers.ATestClass,
+        'object_name': 'ATestClass',
         'attribute': 'class_method',
         'valid': {
             'kargs': ('test'),

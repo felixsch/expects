@@ -27,6 +27,8 @@ class Mapping():
         if context.object_type != ObjectType.Class:
             return None
         for patch in self._patches:
+            # Check if the base class of the patched object is actually the
+            # class context object where searching
             if patch.ctx.base_class == context.object and patch.ctx.attribute_name == context.attribute_name:
                 return patch
         return None

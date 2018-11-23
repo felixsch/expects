@@ -3,6 +3,7 @@ ipdb
 flake8
 pytest
 pytest-watch
+pytest-cov
 hypothesis
 expects
 mamba

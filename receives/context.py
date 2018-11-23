@@ -77,8 +77,11 @@ class Context():
 
     @property
     def base_class(self):
-        if not hasattr(self.object, "__class__"):
-            return None
+        # Removed this check if the implementation runs into an issue. If it's
+        # the case add the test to context_spec.py and reenable this lines!
+        #
+        # if not hasattr(self.object, "__class__"):
+        #     return None
         return self.object.__class__
 
     @property
