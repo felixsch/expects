@@ -6,9 +6,25 @@ from receives.error import assert_failed
 class Expectation():
     def __init__(self, context):
         self._context = context
+        self._has_been_called = False
         self._args = None
         self._return_value = None
         self._should_call_original = False
+
+    def is_for(self, call):
+        if self._has_been_called:
+            return False
+
+        if call.context != self._context:
+            return False
+
+        if self._args is not None and self._args != call.args:
+            return False
+        return True
+
+    @property
+    def called(self):
+        return self._has_been_called
 
     def with_args(self, *kargs, **kwargs):
         self._args = (kargs, kwargs)
@@ -22,6 +38,9 @@ class Expectation():
         self._should_call_original = True
 
     def validate(self, kargs, kwargs):
+        print("Validating expectation {}...".format(self))
+        self._has_been_called = True
+
         if self._args is None:
             return self._return_value
 

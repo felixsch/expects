@@ -2,6 +2,7 @@ from enum import Enum
 import inspect
 
 
+
 class ObjectType(Enum):
     Variable = "variable"
     Module = "module"
@@ -51,6 +52,19 @@ class Context():
 
         attribute = getattr(self.object, self.attribute_name)
         self._attribute_type = determine_attribute_type(self.object, attribute)
+
+    def __eq__(self, other):
+        return self._object == other._object and self._attribute_name == other._attribute_name
+
+    def is_instance(self):
+        if self._object_type == ObjectType.Instance:
+            return True
+        return False
+
+    def get_base_context(self):
+        if not self.is_instance():
+            return None
+        return Context(self.base_class(), self.attribute_name, None)
 
     @property
     def object(self):

@@ -9,18 +9,10 @@ class Receiver():
         self._mapping = Mapping()
 
     def __call__(self, obj, attribute):
-        patch = self._mapping.find_by(obj, attribute)
-
-        if patch is not None:
-            return patch.new_expectation()
-
         caller_frame = sys._getframe(1)
-
         context = Context(obj, attribute, caller_frame)
-        patch = self._mapping.create_patch(context)
-        patch.patch()
 
-        return patch.new_expectation()
+        return self._mapping.add_expectation(context)
 
     def finalize(self):
         self._mapping.finalize()
